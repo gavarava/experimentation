@@ -1,4 +1,4 @@
-package com.aoc;
+package com;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -14,7 +14,7 @@ class InputFetcherTest {
     @Test
     void shouldFetchInputFromFile() throws URISyntaxException {
         target = new InputFetcher("day01-input");
-        String inputData = target.getInputData();
+        String inputData = target.getInputDataAsString();
         assertNotNull(inputData);
         assertThat(inputData, is(""));
     }

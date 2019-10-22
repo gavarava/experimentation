@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.InputFetcher;
 import org.junit.jupiter.api.Test;
 
 class DayOneChallengeSolverTest {
@@ -13,7 +14,7 @@ class DayOneChallengeSolverTest {
     void calculateResultingFrequency() {
 
         InputFetcher inputFetcher = new InputFetcher("day01-input");
-        String inputData = inputFetcher.getInputData();
+        String inputData = inputFetcher.getInputDataAsString();
         String[] inputDataArray = inputData.split("\n");
 
         DayOneChallengeSolver dayOneChallengeSolver = new DayOneChallengeSolver(inputDataArray);
@@ -25,7 +26,7 @@ class DayOneChallengeSolverTest {
     @Test
     void findFirstFrequencyReachedTwice() {
         InputFetcher inputFetcher = new InputFetcher("day01-input");
-        String inputData = inputFetcher.getInputData();
+        String inputData = inputFetcher.getInputDataAsString();
         String[] inputDataArray = inputData.split("\n");
 
         DayOneChallengeSolver dayOneChallengeSolver = new DayOneChallengeSolver(inputDataArray);
