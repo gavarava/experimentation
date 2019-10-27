@@ -6,9 +6,8 @@ public class AdvancedKeywordRankerOptimizationInfo {
     private String elementBeingCountedInArray;
     private long frequencyOfElement;
 
-    public AdvancedKeywordRankerOptimizationInfo(String[] reducedArray, String elementBeingCountedInArray) {
+    public AdvancedKeywordRankerOptimizationInfo(String[] reducedArray) {
         this.reducedArray = reducedArray;
-        this.elementBeingCountedInArray = elementBeingCountedInArray;
     }
 
     public String[] getReducedArray() {
