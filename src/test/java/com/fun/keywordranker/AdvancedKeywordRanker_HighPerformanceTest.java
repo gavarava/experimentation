@@ -7,6 +7,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.InputFetcher;
 import java.util.HashMap;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class AdvancedKeywordRanker_HighPerformanceTest {
@@ -38,6 +39,7 @@ class AdvancedKeywordRanker_HighPerformanceTest {
         return keywordRanker.calculateFrequencyOfWord(input[index]);
     }
 
+    @Disabled
     @Test
     void shouldCalculateFrequencyOfEveryWordInLargeArray_With_Better_Performance() {
 

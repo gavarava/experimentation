@@ -52,7 +52,7 @@ public class AdvancedKeywordRanker extends KeywordRanker {
             }
         }
         AdvancedKeywordRankerOptimizationInfo result = new AdvancedKeywordRankerOptimizationInfo(
-            reducedArray, element);
+            reducedArray);
         result.setFrequencyOfElement(frequencyOfElement);
         return result;
     }

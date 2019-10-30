@@ -24,6 +24,13 @@ public class InputFetcher {
         this.delimiter = delimiter;
     }
 
+    /**
+     * Implement own collector to check performance implication
+     */
+    private static <T> Collector<T, ?, List<T>> toList(int size) {
+        return Collectors.toCollection(() -> new ArrayList<T>(size));
+    }
+
     public long getInputSize() {
         File file = new File(this.getClass().getClassLoader().getResource(filePath).getPath());
         return file.length();
@@ -50,19 +57,34 @@ public class InputFetcher {
         return null;
     }
 
+    public int[] getInputDataAsArrayOfIntegers() {
+        try {
+            File file = new File(this.getClass().getClassLoader().getResource(filePath).getPath());
+            String fileAsString = readFileToString(file);
+            String[] array = fileAsString.split(delimiter);
+            int[] input = new int[array.length];
+            for (int i = 0; i < array.length; i++) {
+                String element = array[i];
+                if (element.contains("+")) {
+                    element = element.replace("+", "");
+                } else if (element.contains("-")) {
+                    element = element.replace("-", "");
+                }
+                input[i] = Integer.parseInt(element);
+            }
+            return input;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<String> getInputDataAsListOfStrings() {
         String inputData = getInputDataAsString();
         String[] arrayFromInputString = inputData.split(delimiter);
         int inputDataListSize = arrayFromInputString.length;
         return Stream.of(arrayFromInputString).collect(toList(inputDataListSize));
         //return Stream.of(arrayFromInputString).collect(Collectors.toList());     // Slower than when we specify size ?? Results unpredictable with 1 MB file
-    }
-
-    /**
-     * Implement own collector to check performance implication
-     */
-    private static <T> Collector<T, ?, List<T>> toList(int size) {
-        return Collectors.toCollection(() -> new ArrayList<T>(size));
     }
 
 }
