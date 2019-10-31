@@ -17,6 +17,9 @@ public class KeywordRanker {
         this.listOfKeywordsToBeRanked = inputAsList;
     }
 
+    public KeywordRanker() {
+    }
+
     public HashMap<String, Long> getMapOfFirstTenFrequentKeywords() {
         return (HashMap<String, Long>) Collections.EMPTY_MAP;
     }
@@ -36,6 +39,20 @@ public class KeywordRanker {
                 calculateFrequencyOfWordUsingList(listOfKeywordsToBeRanked.get(i)));
         }
         return output;
+    }
+
+    public HashMap<String, Long> calculateFrequencyOfEachWordInArrayDuringTraversal(
+        String[] arrayOfKeywordsToBeRanked) {
+        HashMap<String, Long> result = new HashMap<>();
+        for (String element : arrayOfKeywordsToBeRanked) {
+            if (result.containsKey(element)) {
+                long elementCount = result.get(element);
+                result.put(element, ++elementCount);
+            } else {
+                result.put(element, 1L);
+            }
+        }
+        return result;
     }
 
 

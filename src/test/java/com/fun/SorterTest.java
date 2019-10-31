@@ -8,7 +8,7 @@ public class SorterTest {
     @Test
     public void sortUsingBubbleSort() {
 
-        InputFetcher inputFetcher = new InputFetcher("delimited-data-file-small", ",");
+        InputFetcher inputFetcher = new InputFetcher("delimited-data-file-1megabyte", ",");
         int[] arrayOfIntegers = inputFetcher.getInputDataAsArrayOfIntegers();
 
        // Sorter.sortArrayUsingBubbleSort(bigArray);
@@ -19,7 +19,7 @@ public class SorterTest {
     @Test
     public void sortUsingSimpleSort() {
 
-        InputFetcher inputFetcher = new InputFetcher("delimited-data-file-small", ",");
+        InputFetcher inputFetcher = new InputFetcher("delimited-data-file-1megabyte", ",");
         int[] arrayOfIntegers = inputFetcher.getInputDataAsArrayOfIntegers();
 
       //  Sorter.sortArray(bigArray);
@@ -30,7 +30,7 @@ public class SorterTest {
     @Test
     public void sortUsingSelectionSort() {
 
-        InputFetcher inputFetcher = new InputFetcher("delimited-data-file-small", ",");
+        InputFetcher inputFetcher = new InputFetcher("delimited-data-file-1megabyte", ",");
         int[] arrayOfIntegers = inputFetcher.getInputDataAsArrayOfIntegers();
 
         //  Sorter.sortArray(bigArray);
