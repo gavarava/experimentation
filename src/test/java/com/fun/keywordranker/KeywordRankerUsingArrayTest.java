@@ -69,7 +69,6 @@ public class KeywordRankerUsingArrayTest {
     }
 
     @Test
-    @Disabled("BAD PERFORMANCE FOR LARGE INPUT")
     void shouldCalculateFrequencyOfEveryWordInArray_UsingArray_From_Very_Large_Input() {
         // String[] inputDataArray = {"test", "testSomething", "Test", "test"};
         //String[] inputDataArray = {"test", "testSomething", "test"};

@@ -20,16 +20,22 @@ public class KeywordRanker {
     public KeywordRanker() {
     }
 
-    public HashMap<String, Long> getMapOfFirstTenFrequentKeywords() {
-        return (HashMap<String, Long>) Collections.EMPTY_MAP;
-    }
-
     public HashMap<String, Long> calculateFrequencyOfEachUniqueWordInTheArray() {
         HashMap<String, Long> output = new HashMap<>();
         for (int i = 0; i < arrayOfKeywordsToBeRanked.length; i++) {
             output.put(arrayOfKeywordsToBeRanked[i], calculateFrequencyOfWord(arrayOfKeywordsToBeRanked[i]));
         }
         return output;
+    }
+
+    public long calculateFrequencyOfWord(String word) {
+        int frequency = 0;
+        for (String element : arrayOfKeywordsToBeRanked) {
+            if (word.equals(element)) {
+                frequency++;
+            }
+        }
+        return frequency;
     }
 
     public HashMap<String, Long> calculateFrequencyOfEachUniqueWordInTheList() {
@@ -41,6 +47,10 @@ public class KeywordRanker {
         return output;
     }
 
+    /**
+     * BEST TIME COMPLEXITY , increment the counts in hashmap as you keep travelling the array
+     * So its linear time complexity
+     */
     public HashMap<String, Long> calculateFrequencyOfEachWordInArrayDuringTraversal(
         String[] arrayOfKeywordsToBeRanked) {
         HashMap<String, Long> result = new HashMap<>();
@@ -55,15 +65,18 @@ public class KeywordRanker {
         return result;
     }
 
-
-    public long calculateFrequencyOfWord(String word) {
-        int frequency = 0;
+    public HashMap<String, Long> calculateFrequencyOfEachWordInArrayDuringTraversal(
+        List<String> arrayOfKeywordsToBeRanked) {
+        HashMap<String, Long> result = new HashMap<>();
         for (String element : arrayOfKeywordsToBeRanked) {
-            if (word.equals(element)) {
-                frequency++;
+            if (result.containsKey(element)) {
+                long elementCount = result.get(element);
+                result.put(element, ++elementCount);
+            } else {
+                result.put(element, 1L);
             }
         }
-        return frequency;
+        return result;
     }
 
     public long calculateFrequencyOfWordUsingList(String word) {
