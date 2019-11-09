@@ -2,22 +2,35 @@ package com.kattis.treasurehunt;
 
 import static java.lang.Integer.parseInt;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class TreasureHunt {
+public class TreasureDiveSolver {
 
     private static final String WHITESPACE = "\\s";
 
-    public static void main(String[] args) throws FileNotFoundException {
-        initializeCaveSystem();
+    private MaximumIdolsFinder[] maximumIdolsFinder;
+    private NearestTunnelFinder[] nearestTunnelFinder;
+    private int[] availableUnitsOfAir;
+    private int testCases;
+
+    public void initializeFromFile(String filePath) throws FileNotFoundException {
+        System.setIn(new FileInputStream(
+            filePath));
+        initializeFromSystemIn();
     }
 
-    private static void initializeCaveSystem() {
+    public void initializeFromSystemIn() {
         Scanner sc = new Scanner(System.in);
         int numberOfTestCases = sc.nextInt();
+        maximumIdolsFinder = new MaximumIdolsFinder[numberOfTestCases];
+        nearestTunnelFinder = new NearestTunnelFinder[numberOfTestCases];
+        availableUnitsOfAir = new int[numberOfTestCases];
+
         sc.nextLine();
         while (sc.hasNext()) {
             if (numberOfTestCases == 0) {
@@ -31,20 +44,26 @@ public class TreasureHunt {
 
             int numberOfIdols = parseInt(sc.nextLine());
 
-            CaveSystem caveSystem = new CaveSystem(numberOfCaves, numberOfTunnels, numberOfIdols);
-            caveSystem.setTunnels(tunnelsList);
+            maximumIdolsFinder[testCases] = new MaximumIdolsFinder(numberOfIdols);
 
             String idolsToCaveMapping = sc.nextLine();
             HashMap<String, Integer> caveToIdolCountMap = setupCaveToIdolCountMapFromInput(idolsToCaveMapping);
-            caveSystem.setCaveToIdolCountMap(caveToIdolCountMap);
+            maximumIdolsFinder[testCases].setCaveToIdolCountMap(caveToIdolCountMap);
+            nearestTunnelFinder[testCases] = new NearestTunnelFinder(tunnelsList, caveToIdolCountMap,
+                numberOfCaves);
+            maximumIdolsFinder[testCases].setNearestTunnelFinder(nearestTunnelFinder[testCases]);
 
             String unitsOfAir = sc.nextLine();
-            System.out.println(caveSystem.calculateNumberOfIdolsRecoverable(Integer.parseInt(unitsOfAir)));
+            availableUnitsOfAir[testCases] = Integer.parseInt(unitsOfAir);
+
+            // Initialize nearestTunnelFinder
+            nearestTunnelFinder[testCases].initialize();
             numberOfTestCases--;
+            testCases++;
         }
     }
 
-    static ArrayList<Tunnel> setupTunnelDetails(Scanner sc, int numberOfTunnels) {
+    private ArrayList<Tunnel> setupTunnelDetails(Scanner sc, int numberOfTunnels) {
         ArrayList<Tunnel> tunnelArray = new ArrayList<>(numberOfTunnels);
         for (int i = 0; i < numberOfTunnels; i++) {
             String tunnelDetailsString = sc.nextLine();
@@ -55,7 +74,7 @@ public class TreasureHunt {
         return tunnelArray;
     }
 
-    static HashMap<String, Integer> setupCaveToIdolCountMapFromInput(String idolsToCaveMapping) {
+    public HashMap<String, Integer> setupCaveToIdolCountMapFromInput(String idolsToCaveMapping) {
         String[] idolToCaveMappingArray = idolsToCaveMapping.split(WHITESPACE);
         HashMap<String, Integer> caveToIdolCountMap = new HashMap<>();
         for (int i = 0; i < idolToCaveMappingArray.length; i++) {
@@ -68,5 +87,23 @@ public class TreasureHunt {
             }
         }
         return caveToIdolCountMap;
+    }
+
+    public void printNumberOfIdolsRecoverableFromCaveSystem(PrintStream out) {
+        for (int i = 0; i < testCases; i++) {
+            out.println(maximumIdolsFinder[i].calculateNumberOfIdolsRecoverable(availableUnitsOfAir[i]));
+        }
+    }
+
+    public MaximumIdolsFinder getMaximumIdolsFinder() {
+        return maximumIdolsFinder[0];
+    }
+
+    public NearestTunnelFinder getNearestTunnelFinder() {
+        return nearestTunnelFinder[0];
+    }
+
+    public int getAvailableUnitsOfAir() {
+        return availableUnitsOfAir[0];
     }
 }
