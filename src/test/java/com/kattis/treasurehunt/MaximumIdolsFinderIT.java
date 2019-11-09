@@ -20,7 +20,7 @@ class MaximumIdolsFinderIT {
         treasureDiveSolver
             .initializeFromFile(FILE_PATH + "treasurehunt/treasurehunt_when_many_interconnected_caves_II");
         maximumIdolsFinder = treasureDiveSolver.getMaximumIdolsFinder();
-        assertThat(maximumIdolsFinder.calculateNumberOfIdolsRecoverable(treasureDiveSolver.getAvailableUnitsOfAir()), is(4));
+        assertThat(maximumIdolsFinder.calculateNumberOfIdolsRecoverable(treasureDiveSolver.getAvailableUnitsOfAir()), is(5));
     }
 
 

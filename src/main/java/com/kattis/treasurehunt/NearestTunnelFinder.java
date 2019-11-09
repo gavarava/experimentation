@@ -33,25 +33,46 @@ public class NearestTunnelFinder {
         Tunnel nextClosestTunnel = null;
         int destinationCaveOfCurrentTunnel = currentTunnel.getDestination();
         // Get the ones that start with destination of current one
-        ArrayList<Tunnel> connectingTunnels = caveToLeadingTunnelsMap
-            .get(valueOf(destinationCaveOfCurrentTunnel));
-        if (connectingTunnels != null) {
-            Optional<Tunnel> nextConnectedTunnel = getNextUnvisitedTunnelWithIdols(currentTunnel, connectingTunnels);
-            // Sanitize nextSuggestedTunnelOptional & get value
-            nextClosestTunnel = nextConnectedTunnel.isPresent() ? nextConnectedTunnel.get() : null;
-        }
+        nextClosestTunnel = getClosestTunnelFromGivenPoint(currentTunnel, destinationCaveOfCurrentTunnel);
         if (nextClosestTunnel == null) {
-            // if reccommended closest destination was not connected then its possible that there is
-            // a place to go from the starting point again
-            nextClosestTunnel = getShortestTunnelFromStartingPointWithExclusion(currentTunnel);
+            // check if possible to go somewhere from starting point of this tunnel
+            nextClosestTunnel = getClosestTunnelFromGivenPoint(currentTunnel, currentTunnel.getStartingPointCave());
+            if (nextClosestTunnel == null) {
+                // if reccommended closest destination was not connected then its possible that there is
+                // a place to go from the starting point again
+                nextClosestTunnel = getShortestTunnelFromStartingPointWithExclusion(currentTunnel);
+            }
         }
         return nextClosestTunnel;
     }
 
+    private Tunnel getClosestTunnelFromGivenPoint(Tunnel currentTunnel,
+        int pointToCheckForNextTunnel) {
+        ArrayList<Tunnel> connectingTunnels = caveToLeadingTunnelsMap
+            .get(valueOf(pointToCheckForNextTunnel));
+        if (connectingTunnels != null) {
+            Optional<Tunnel> nextConnectedTunnel = getNextUnvisitedTunnelWithIdols(currentTunnel, connectingTunnels);
+            if (nextConnectedTunnel.isEmpty()) {
+                // Check if there is something without idols
+                nextConnectedTunnel = getNextUnvisitedTunnelWithoutIdols(currentTunnel, connectingTunnels);
+
+            }
+            return nextConnectedTunnel.isPresent() ? nextConnectedTunnel.get() : null;
+        }
+        return null;
+    }
+
+    private Optional<Tunnel> getNextUnvisitedTunnelWithoutIdols(Tunnel currentTunnel,
+        ArrayList<Tunnel> connectingTunnels) {
+        return connectingTunnels.stream()
+            .filter(tunnelFromSuggestions -> !tunnelFromSuggestions.equals(currentTunnel))
+            .filter(tunnelFromSuggestions -> !tunnelFromSuggestions.isVisited())
+            .filter(tunnelFromSuggestions -> !hasIdols(tunnelFromSuggestions))
+            .min(Comparator.comparing(Tunnel::getDistanceInConsumedAirUnits));
+    }
+
     private Optional<Tunnel> getNextUnvisitedTunnelWithIdols(Tunnel currentTunnel,
         ArrayList<Tunnel> connectingTunnels) {
-        boolean foundTunnelWithIdols = false;
-
         return connectingTunnels.stream()
             .filter(tunnelFromSuggestions -> !tunnelFromSuggestions.equals(currentTunnel))
             .filter(tunnelFromSuggestions -> !tunnelFromSuggestions.isVisited())
