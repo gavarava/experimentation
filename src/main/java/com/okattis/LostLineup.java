@@ -5,8 +5,6 @@ public class LostLineup {
     public static int[] getOriginalLineOfPersons(int totalNumberOfPersons,
         int[] newLineupWithNumberOfPersonsBetweenJimAndOthers) {
 
-        checkValidInputs(totalNumberOfPersons, newLineupWithNumberOfPersonsBetweenJimAndOthers);
-
         if (totalNumberOfPersons == 1) {
             return new int[]{1};
         }
@@ -21,17 +19,6 @@ public class LostLineup {
         }
 
         return originalLineup;
-    }
-
-    private static void checkValidInputs(int totalNumberOfPersons,
-        int[] newLineupWithNumberOfPersonsBetweenJimAndOthers) {
-        if (totalNumberOfPersons <= 0) {
-            throw new IllegalArgumentException("Invalid length of queue = " + totalNumberOfPersons);
-        }
-
-        if (newLineupWithNumberOfPersonsBetweenJimAndOthers.length != totalNumberOfPersons -1) {
-            throw new IllegalArgumentException("Invalid lineup of people after Jim");
-        }
     }
 
 }
