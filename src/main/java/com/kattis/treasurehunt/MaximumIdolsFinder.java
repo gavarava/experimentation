@@ -24,54 +24,33 @@ public class MaximumIdolsFinder {
         // for every tunnel available first find which tunnel can be visited without exhausting supply
         int startingPoint = STARTING_NODE;
         int idolsCount = 0;
-        // Sort Tunnels to enable faster consumption of each available tunnel
         Tunnel currentTunnel = nearestTunnelFinder.getShortestUnvisitedTunnelFromStartingPoint();
         Tunnel previousTunnel = null;
         while (totalAvailableIdols != 0 || idolsCount != 8) {
-            // Mark this as visited
             currentTunnel.setVisited(true);
             if (currentTunnel.getStartingPointCave() == startingPoint) {
+                unitsOfAir = reduceAmountOfAirConsumed(unitsOfAir, currentTunnel);
                 Integer recoverableIdolsCountFromCurrentTunnel = getRecoverableIdolsCount(currentTunnel);
-                unitsOfAir -= 2 * currentTunnel.getDistanceInConsumedAirUnits();
-                // Entire if else section deals with getting idols from current tunnel
                 if (unitsOfAir < 0) {
                     break;
                 } else if (unitsOfAir > 0) {
-                    recoverableIdolsCountFromCurrentTunnel = getRecoverableIdolsCount(currentTunnel);
-                    // if idols found at current tunnel then set it as closestWith Idols
-                    if (recoverableIdolsCountFromCurrentTunnel > 0) {
-                        idolsCount += recoverableIdolsCountFromCurrentTunnel;
-                        totalAvailableIdols -= recoverableIdolsCountFromCurrentTunnel;
-                    }
+                    idolsCount = takeIdolsWhenfound(idolsCount, recoverableIdolsCountFromCurrentTunnel);
                 } else if (unitsOfAir == 0) {
-                    recoverableIdolsCountFromCurrentTunnel = getRecoverableIdolsCount(currentTunnel);
-                    // if idols found at current tunnel then set it as closestWith Idols
-                    if (recoverableIdolsCountFromCurrentTunnel > 0) {
-                        idolsCount += recoverableIdolsCountFromCurrentTunnel;
-                        totalAvailableIdols -= recoverableIdolsCountFromCurrentTunnel;
-                    }
+                    idolsCount = takeIdolsWhenfound(idolsCount, recoverableIdolsCountFromCurrentTunnel);
                     // break since unitsOfAir have been exhausted after this dive
                     break;
                 }
             } else {
-                // When the caves are interconnected with each other
                 if (currentTunnel != null) {
-                    //tunnel = nextClosestTunnel;
                     if (previousTunnel.getDestination() == currentTunnel.getStartingPointCave()) {
+                        unitsOfAir = reduceAmountOfAirConsumed(unitsOfAir, currentTunnel);
                         Integer recoverableIdolsCountFromCurrentTunnel = getRecoverableIdolsCount(currentTunnel);
-                        // if idols found at current tunnel then take idols
-                        if (recoverableIdolsCountFromCurrentTunnel > 0) {
-                            idolsCount += recoverableIdolsCountFromCurrentTunnel;
-                            totalAvailableIdols -= recoverableIdolsCountFromCurrentTunnel;
-                        }
-                        // Reduce Amount of air used
-                        unitsOfAir -= 2 * currentTunnel.getDistanceInConsumedAirUnits();
+                        idolsCount = takeIdolsWhenfound(idolsCount, recoverableIdolsCountFromCurrentTunnel);
                         if (unitsOfAir < 0) {
                             break;
                         } else if (unitsOfAir > 0) {
                             continue;
                         } else if (unitsOfAir == 0) {
-                            // break since unitsOfAir have been exhausted after this dive
                             break;
                         }
                     }
@@ -85,6 +64,24 @@ public class MaximumIdolsFinder {
                 break;
             }
         }
+        return idolsCount;
+    }
+
+    private int reduceAmountOfAirConsumed(int unitsOfAir, Tunnel currentTunnel) {
+        unitsOfAir -= 2 * currentTunnel.getDistanceInConsumedAirUnits();
+        return unitsOfAir;
+    }
+
+    private int takeIdolsWhenfound(int idolsCount, Integer recoverableIdolsCountFromCurrentTunnel) {
+        if (recoverableIdolsCountFromCurrentTunnel > 0) {
+            idolsCount = updateCounts(idolsCount, recoverableIdolsCountFromCurrentTunnel);
+        }
+        return idolsCount;
+    }
+
+    private int updateCounts(int idolsCount, Integer recoverableIdolsCountFromCurrentTunnel) {
+        idolsCount += recoverableIdolsCountFromCurrentTunnel;
+        totalAvailableIdols -= recoverableIdolsCountFromCurrentTunnel;
         return idolsCount;
     }
 
