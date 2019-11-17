@@ -4,6 +4,7 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
@@ -38,8 +39,14 @@ public class InputFetcher {
 
     public String getInputDataAsString() {
         try {
-            File file = new File(this.getClass().getClassLoader().getResource(filePath).getPath());
-            return readFileToString(file);
+            URL resource = this.getClass().getClassLoader().getResource(filePath);
+            if (resource != null) {
+                File file = new File(resource.getPath());
+                return readFileToString(file);
+            } else {
+                File file = new File(filePath);
+                return readFileToString(file);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

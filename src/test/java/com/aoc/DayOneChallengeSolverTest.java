@@ -3,7 +3,6 @@ package com.aoc;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.InputFetcher;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ class DayOneChallengeSolverTest {
 
         InputFetcher inputFetcher = new InputFetcher("day01-input");
         String inputData = inputFetcher.getInputDataAsString();
-        String[] inputDataArray = inputData.split("\n");
+        String[] inputDataArray = inputData.split(",");
 
         DayOneChallengeSolver dayOneChallengeSolver = new DayOneChallengeSolver(inputDataArray);
         int resultingFrequency = dayOneChallengeSolver.calculateResultingFrequency();
@@ -27,12 +26,21 @@ class DayOneChallengeSolverTest {
     void findFirstFrequencyReachedTwice() {
         InputFetcher inputFetcher = new InputFetcher("day01-input");
         String inputData = inputFetcher.getInputDataAsString();
-        String[] inputDataArray = inputData.split("\n");
+        String[] inputDataArray = inputData.split(",");
 
         DayOneChallengeSolver dayOneChallengeSolver = new DayOneChallengeSolver(inputDataArray);
 
         int firstRepeatingFrequency = dayOneChallengeSolver.findFirstRepeatingFrequency();
         System.out.println("Ans2 Day One: " + firstRepeatingFrequency);
+    }
+
+    @Test
+    void shouldFirstRepeatingCumulativeFrequency_2() {
+        int[] testArray2 = {-7, +7};
+        int expected = 0;
+        DayOneChallengeSolver dayOneChallengeSolver = new DayOneChallengeSolver(null);
+        int result = dayOneChallengeSolver.getFirstRepeatingCumulativeFrequency(testArray2);
+        assertEquals(expected, result);
     }
 
     @Test

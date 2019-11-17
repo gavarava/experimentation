@@ -15,7 +15,7 @@ public class LostLineup {
 
         for (int i = 0; i < newLineupWithNumberOfPersonsBetweenJimAndOthers.length; i++) {
             int personsBetweenCurrentPersonAndJim = newLineupWithNumberOfPersonsBetweenJimAndOthers[i];
-            originalLineup[personsBetweenCurrentPersonAndJim+1] = i+2;
+            originalLineup[personsBetweenCurrentPersonAndJim + 1] = i+2;
         }
 
         return originalLineup;

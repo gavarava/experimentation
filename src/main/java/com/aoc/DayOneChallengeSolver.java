@@ -26,27 +26,26 @@ public class DayOneChallengeSolver {
     }
 
     int getFirstRepeatingCumulativeFrequency(int[] input) {
-        int[] output = new int[input.length * 2];
-        int j = 0;
-        for (int i = 0; i < input.length; i++) {
-            if (i == 0 && j == 0) {
-                output[j] = input[i] + input[i + 1];
-                i += 1;
-                j++;
+        int index = 0;
+        int traversedLengthOfInput = input.length;
+        int sum = 0;
+        int cycleSum = 0;
+        while (traversedLengthOfInput != 0) {
+            sum += input[index];
+            ++index;
+            --traversedLengthOfInput;
+            if (traversedLengthOfInput == 0 && index == input.length) {
+                cycleSum = sum;
+                // reset
+                index = 0;
+                traversedLengthOfInput = input.length;
             } else {
-                int latestFrequency = input[i] + output[j - 1];
-                output[j] = latestFrequency;
-                j++;
-                if (checkRepetition(output)) {
-                    return latestFrequency;
+                if (cycleSum == sum) {
+                    break;
                 }
             }
-            if (i == input.length - 1 && j > 0) {
-                // Reset the whole array
-                i = 0;
-            }
         }
-        return 0;
+        return cycleSum;
     }
 
     private boolean checkRepetition(int[] testArray) {

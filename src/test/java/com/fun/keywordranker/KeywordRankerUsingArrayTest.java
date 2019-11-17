@@ -68,6 +68,7 @@ public class KeywordRankerUsingArrayTest {
         assertThat(frequencyOfFourthWord, is(7080L));
     }
 
+    @Disabled
     @Test
     void shouldCalculateFrequencyOfEveryWordInArray_UsingArray_From_Very_Large_Input() {
         // String[] inputDataArray = {"test", "testSomething", "Test", "test"};

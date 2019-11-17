@@ -1,10 +1,12 @@
 package com.fun;
 
 import com.InputFetcher;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class SorterTest {
 
+    @Disabled
     @Test
     public void sortUsingBubbleSort() {
 
@@ -16,6 +18,7 @@ public class SorterTest {
        // Sorter.printArray(smallArray);
     }
 
+    @Disabled
     @Test
     public void sortUsingSimpleSort() {
 
@@ -27,6 +30,7 @@ public class SorterTest {
       //  Sorter.printArray(smallArray);
     }
 
+    @Disabled
     @Test
     public void sortUsingSelectionSort() {
 
