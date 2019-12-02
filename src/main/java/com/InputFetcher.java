@@ -64,6 +64,26 @@ public class InputFetcher {
         return null;
     }
 
+    public long[] getInputDataAsArrayOfLongIntegers() {
+        try {
+            File file = new File(this.getClass().getClassLoader().getResource(filePath).getPath());
+            String fileAsString = readFileToString(file);
+            String[] array = fileAsString.split(delimiter);
+            long[] input = new long[array.length];
+            for (int i = 0; i < array.length; i++) {
+                String element = array[i];
+                if (element.contains("+")) {
+                    element = element.replace("+", "");
+                }
+                input[i] = Integer.parseInt(element);
+            }
+            return input;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public int[] getInputDataAsArrayOfIntegers() {
         try {
             File file = new File(this.getClass().getClassLoader().getResource(filePath).getPath());

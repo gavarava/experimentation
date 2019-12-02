@@ -1,6 +1,7 @@
 package com.aoc;
 
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class DayOneChallengeSolver {
@@ -11,51 +12,41 @@ public class DayOneChallengeSolver {
         this.inputFrequencies = inputFrequencies;
     }
 
+    public static long getFirstRepeatingFrequency(long[] input) {
+        List<Long> frequencyMap = new ArrayList<>();
+        long change = 0;
+        int j = 0;
+        int loopBreaker = 0;
+        System.out.println("input length is = " + input.length);
+        while (j < input.length) {
+            change += input[j];
+            if (frequencyMap.contains(change)) {
+                System.out.println("FOUND CHANGE = " + change + " at location --> " + frequencyMap.indexOf(change));
+                System.out.println("LOOP BREAKING AT " + loopBreaker);
+                break;
+            } else {
+                frequencyMap.add(change);
+            }
+            if (j == input.length - 1) {
+                j = 0;
+            } else {
+                j++;
+            }
+            if (loopBreaker == (input.length - 1) * 1000000L) {
+                System.out.println("loopBreaker = " + loopBreaker);
+                System.out.println("LOOP BREAKING AT " + change);
+                break;
+            } else {
+                loopBreaker++;
+            }
+        }
+        return change;
+    }
+
     public int calculateResultingFrequency() {
         int sum = Stream
             .of(inputFrequencies)
             .mapToInt(s -> Integer.parseInt(s)).sum();
         return sum;
-    }
-
-    public int findFirstRepeatingFrequency() {
-        IntStream intStream = Stream
-            .of(inputFrequencies)
-            .mapToInt(s -> Integer.parseInt(s));
-        return getFirstRepeatingCumulativeFrequency(intStream.toArray());
-    }
-
-    int getFirstRepeatingCumulativeFrequency(int[] input) {
-        int index = 0;
-        int traversedLengthOfInput = input.length;
-        int sum = 0;
-        int cycleSum = 0;
-        while (traversedLengthOfInput != 0) {
-            sum += input[index];
-            ++index;
-            --traversedLengthOfInput;
-            if (traversedLengthOfInput == 0 && index == input.length) {
-                cycleSum = sum;
-                // reset
-                index = 0;
-                traversedLengthOfInput = input.length;
-            } else {
-                if (cycleSum == sum) {
-                    break;
-                }
-            }
-        }
-        return cycleSum;
-    }
-
-    private boolean checkRepetition(int[] testArray) {
-        for (int i = 0; i < testArray.length; i++) {
-            for (int j = i + 1; j < testArray.length; j++) {
-                if (testArray[i] == testArray[j]) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
