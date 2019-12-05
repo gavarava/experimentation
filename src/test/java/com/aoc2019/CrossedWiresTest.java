@@ -15,42 +15,49 @@ class CrossedWiresTest {
 
   public static final int OFFSET_CENTRAL_PORT = 1;
 
-    @Test
-    void findClosestIntersectingDistance_SMALL_INPUT_2() {
-        String[] wireOnePoints = {"R98","U47","R26","D63","R33","U87","L62","D20","R33","U53","R51"};
-        String[] wireTwoPoints = {"U98","R91","D20","R16","D67","R40","U7","R15","U6","R7"};
-        GridNavigator gridNavigator = CrossedWires.traceWirePaths(wireOnePoints);
-        List<Point> pathTraversed = gridNavigator.getPathTraversed();
-        System.out.println(pathTraversed);
-        System.out.println(CrossedWires.calculateManhattanDistance(Point.CENTRAL_PORT, pathTraversed.get(pathTraversed.size()- 1)));
-        GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoPoints);
-        List<Point> pathTraversed2 = gridNavigator2.getPathTraversed();
-        System.out.println(pathTraversed2);
-        System.out.println(CrossedWires.calculateManhattanDistance(Point.CENTRAL_PORT, pathTraversed2.get(pathTraversed2.size()- 1)));
+  @Test
+  void findClosestIntersectingDistance_SMALL_INPUT_2() {
+    String[] wireOnePoints = {"R98", "U47", "R26", "D63", "R33", "U87", "L62", "D20", "R33", "U53",
+        "R51"};
+    String[] wireTwoPoints = {"U98", "R91", "D20", "R16", "D67", "R40", "U7", "R15", "U6", "R7"};
+    GridNavigator gridNavigator = CrossedWires.traceWirePaths(wireOnePoints);
+    List<Point> pathTraversed = gridNavigator.getPathTraversed();
+    System.out.println(pathTraversed);
+    System.out.println(CrossedWires.calculateManhattanDistance(Point.CENTRAL_PORT,
+        pathTraversed.get(pathTraversed.size() - 1)));
+    GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoPoints);
+    List<Point> pathTraversed2 = gridNavigator2.getPathTraversed();
+    System.out.println(pathTraversed2);
+    System.out.println(CrossedWires.calculateManhattanDistance(Point.CENTRAL_PORT,
+        pathTraversed2.get(pathTraversed2.size() - 1)));
 
-        System.out.println(CrossedWires.calculateManhattanDistance(pathTraversed.get(pathTraversed.size()- 1), pathTraversed2.get(pathTraversed2.size()- 1)));
+    System.out.println(CrossedWires
+        .calculateManhattanDistance(pathTraversed.get(pathTraversed.size() - 1),
+            pathTraversed2.get(pathTraversed2.size() - 1)));
 
-        System.out.println(CrossedWires.findClosestIntersectingDistance(wireOnePoints, wireTwoPoints));
-    }
+    System.out.println(CrossedWires.findClosestIntersectingDistance(wireOnePoints, wireTwoPoints));
+  }
+
+  @Test
+  void testSimplestInput() {
+    String[] wireOnePoints = {"R8", "U5", "L5", "D3"};
+    String[] wireTwoPoints = {"U7", "R6", "D4", "L4"};
+
+    int result = CrossedWires
+        .findClosestIntersectingDistance(wireOnePoints, wireTwoPoints);
+
+    // 6,5 and 3,3 are the commons
+   // assertThat(result, is(equalTo(6)));
+  }
 
   @Test
   void findClosestIntersectingDistance_SMALL_INPUT() {
     InputFetcher inputFetcher = new InputFetcher("aoc2019-d3", "\n");
     String[] inputDataAsArrayOfStrings = inputFetcher.getInputDataAsArrayOfStrings();
-    String[] wireOnePoints = {"R75","D30","R83","U83","L12","D49","R71","U7","L72"};
-    String[] wireTwoPoints = {"U62","R66","U55","R34","D71","R55","D58","R83"};
-      GridNavigator gridNavigator = CrossedWires.traceWirePaths(wireOnePoints);
-      List<Point> pathTraversed = gridNavigator.getPathTraversed();
-      System.out.println(pathTraversed);
-      System.out.println(CrossedWires.calculateManhattanDistance(Point.CENTRAL_PORT, pathTraversed.get(pathTraversed.size()- 1)));
-      GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoPoints);
-      List<Point> pathTraversed2 = gridNavigator2.getPathTraversed();
-      System.out.println(pathTraversed2);
-      System.out.println(CrossedWires.calculateManhattanDistance(Point.CENTRAL_PORT, pathTraversed2.get(pathTraversed2.size()- 1)));
-
-      System.out.println(CrossedWires.calculateManhattanDistance(pathTraversed.get(pathTraversed.size()- 1), pathTraversed2.get(pathTraversed2.size()- 1)));
-
-      // System.out.println(CrossedWires.findClosestIntersectingDistance(wireOnePoints, wireTwoPoints));
+    String[] wireOnePoints = {"R75", "D30", "R83", "U83", "L12", "D49", "R71", "U7", "L72"};
+    String[] wireTwoPoints = {"U62", "R66", "U55", "R34", "D71", "R55", "D58", "R83"};
+    int result = CrossedWires
+        .findClosestIntersectingDistance(wireOnePoints, wireTwoPoints);
   }
 
   @Test
@@ -62,7 +69,7 @@ class CrossedWiresTest {
     GridNavigator gridNavigator = CrossedWires.traceWirePaths(wireOnePoints);
 
     assertThat(gridNavigator.getPathTraversed().size() - OFFSET_CENTRAL_PORT,
-        is(equalTo(wireOnePoints.length)));
+        is(equalTo(wireOnePoints.length - 1)));
     //System.out.println(gridNavigator.getPathTraversed().toString());
   }
 

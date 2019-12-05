@@ -69,11 +69,11 @@ class GridNavigatorTest {
         Point startingPoint = Point.CENTRAL_PORT;
         GridNavigator gridNavigator = new GridNavigator(startingPoint);
         gridNavigator.move(75, R);
-        gridNavigator.move(30, D);
+        gridNavigator.move(30, U);
         gridNavigator.move(83, R);
 
         gridNavigator.move(83, L);
-        gridNavigator.move(30, U);
+        gridNavigator.move(30, D);
         gridNavigator.move(75, L);
         assertThat(gridNavigator.getLatestPoint(), is(equalTo(Point.CENTRAL_PORT)));
     }
@@ -84,13 +84,13 @@ class GridNavigatorTest {
         Point startingPoint = Point.CENTRAL_PORT;
         GridNavigator gridNavigator = new GridNavigator(startingPoint);
         gridNavigator.move(75, R);
-        gridNavigator.move(30, D);
+        gridNavigator.move(30, U);
         gridNavigator.move(83, R);
 
         gridNavigator.move(83, L);
-        gridNavigator.move(30, U);
+        gridNavigator.move(30, D);
         gridNavigator.move(75, L);
         assertThat(gridNavigator.getLatestPoint(), is(equalTo(Point.CENTRAL_PORT)));
-        assertThat(gridNavigator.getPathTraversed().toString(), is("[(x=0, y=0), (x=75, y=0), (x=75, y=-30), (x=158, y=-30), (x=75, y=-30), (x=75, y=0), (x=0, y=0)]"));
+        assertThat(gridNavigator.getPathTraversed().toString(), is("[(x=75, y=0), (x=75, y=-30), (x=158, y=-30), (x=75, y=-30), (x=75, y=0), (x=0, y=0)]"));
     }
 }

@@ -34,9 +34,6 @@ public class GridNavigator {
   }
 
   public GridNavigator move(int units, Direction direction) {
-    if (pathTraversed.isEmpty()) {
-      //pathTraversed.add(startingPoint);
-    }
     switch (direction) {
       case U:
         latestPoint = Point.create(latestPoint.getX(), latestPoint.getY() + units);
@@ -44,7 +41,8 @@ public class GridNavigator {
         break;
 
       case D:
-        latestPoint = Point.create(latestPoint.getX(), latestPoint.getY() - units);
+        int y = latestPoint.getY() - units;
+        latestPoint = Point.create(latestPoint.getX(), y);
         pathTraversed.add(latestPoint);
         break;
 
@@ -54,7 +52,8 @@ public class GridNavigator {
         break;
 
       case L:
-        latestPoint = Point.create(latestPoint.getX() - units, latestPoint.getY());
+        int x = latestPoint.getX() - units;
+        latestPoint = Point.create(x, latestPoint.getY());
         pathTraversed.add(latestPoint);
         break;
     }
