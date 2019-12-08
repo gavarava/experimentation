@@ -28,6 +28,7 @@ public class CrossedWiresOther {
         String[] wireTwoPoints = input[1].split(",");
         Map<String, Integer> wire = new HashMap<>();
 
+        long startTime = System.currentTimeMillis();
         int closestDistance = Integer.MAX_VALUE;
         int shortestWire = Integer.MAX_VALUE;
 
@@ -64,6 +65,8 @@ public class CrossedWiresOther {
                 y = newY;
             }
         }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total time taken = " + (endTime - startTime) / 1000 + " seconds");
         System.out.println("closestDistance = " + closestDistance); /* Part 1 */
         System.out.println("shortestWire = " + shortestWire);
     }
