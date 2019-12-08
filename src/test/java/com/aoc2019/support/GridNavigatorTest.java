@@ -37,22 +37,6 @@ class GridNavigatorTest {
     }
 
     @Test
-    void recordNumberOfStepsForEveryStepOnTheWayDuringNavigating() {
-        Point startingPoint = Point.CENTRAL_PORT;
-        GridNavigator gridNavigator = new GridNavigator(startingPoint);
-
-        gridNavigator.move(3, U);
-        gridNavigator.move(2, U);
-        gridNavigator.move(3, D);
-        gridNavigator.move(9, U);
-
-        int totalDistanceTraversed = 11;
-        Point expectedPoint = Point.create(0, totalDistanceTraversed);
-        assertThat(gridNavigator.getLatestPoint(), is(equalTo(expectedPoint)));
-        assertThat(gridNavigator.getPointsToNumberOfStepsMap().size(), is(equalTo(totalDistanceTraversed)));
-    }
-
-    @Test
     void moveLeftTwoTimes() {
         Point startingPoint = Point.CENTRAL_PORT;
         GridNavigator gridNavigator = new GridNavigator(startingPoint);
