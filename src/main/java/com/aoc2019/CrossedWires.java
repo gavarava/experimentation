@@ -1,93 +1,95 @@
 package com.aoc2019;
 
+import static com.aoc2019.support.Point.CENTRAL_PORT;
+
 import com.aoc2019.support.GridNavigator;
 import com.aoc2019.support.Point;
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CrossedWires {
 
-  public static int findClosestIntersectingDistance(String[] wireOneCoordinates,
-      String[] wireTwoCoordinates) {
-    // Trace Wire Paths
-    GridNavigator gridNavigatorStateWire01 = traceWirePaths(wireOneCoordinates);
-    List<Point> pointsTraversedByWire01 = gridNavigatorStateWire01.getPathTraversed();
-    GridNavigator gridNavigatorStateWire02 = traceWirePaths(wireTwoCoordinates);
-    List<Point> pointsTraversedByWire02 = gridNavigatorStateWire02.getPathTraversed();
-
-    System.out.println("Wire01 ->" + pointsTraversedByWire01);
-    System.out.println("Wire02 ->" + pointsTraversedByWire02);
-    // - findCommonCo-ordinates
-    Point initialStartLine01 = Point.CENTRAL_PORT;
-    Point initialStartLine02 = Point.CENTRAL_PORT;
-    List<Point> intersections = new ArrayList<>();
-
-    for (Point pointOnLine1 : pointsTraversedByWire01) {
-      for (int i = 0; i < pointsTraversedByWire02.size(); i++) {
-        Point pointOnLine2ToTest = pointsTraversedByWire02.get(i);
-        Point intersectionBetweenTwoLines = findIntersectionBetweenTwoLines(initialStartLine01,
-            pointOnLine1, initialStartLine02, pointOnLine2ToTest);
-        if (intersectionBetweenTwoLines != null
-            && !intersectionBetweenTwoLines.equals(Point.CENTRAL_PORT)) {
-          intersections.add(
-              intersectionBetweenTwoLines);
-          initialStartLine02 = pointOnLine2ToTest;
+    public static int findClosestIntersectingDistance(String[] wireOneCoordinates,
+        String[] wireTwoCoordinates) {
+        long startTime = System.currentTimeMillis();
+        // Trace Wire Paths
+        GridNavigator gridNavigator = CrossedWires.traceWirePaths(wireOneCoordinates);
+        List<Point> pathTraversedWireOne = gridNavigator.getPathTraversed();
+        GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoCoordinates);
+        List<Point> pathTraversedWireTwo = gridNavigator2.getPathTraversed();
+        // - findCommonCo-ordinates
+        Set<Point> intersectionOfTwoWires = new HashSet<>();
+        for (Point pointOneW1 : pathTraversedWireOne) {
+            if (pathTraversedWireTwo.contains(pointOneW1) && !pointOneW1.equals(CENTRAL_PORT)) {
+                intersectionOfTwoWires.add(pointOneW1);
+            }
         }
-      }
-      initialStartLine01 = pointOnLine1;
+
+        Map<Point, Integer> numberOfStepsMap = recordNumberOfSteps(pathTraversedWireOne, pathTraversedWireTwo,
+            intersectionOfTwoWires);
+        Optional<Entry<Point, Integer>> minValue = numberOfStepsMap.entrySet()
+            .stream().min(Entry.comparingByValue());
+        // Warning:(39, 58) 'Optional.get()' without 'isPresent()' check
+        System.out.println("ANS: Day03 P2 = " + minValue.get().getValue());
+
+        int result = 0;
+        // return lowest distance
+        if (!intersectionOfTwoWires.isEmpty()) {
+            result = intersectionOfTwoWires.stream()
+                .map(point -> calculateManhattanDistance(CENTRAL_PORT, point))
+                .collect(Collectors.toList()).stream().sorted().findFirst().orElse(0);
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("ANS: Day03 P1 = " + result);
+        System.out.println("Total time taken = " + (endTime - startTime) / 1000 + " seconds");
+        return result;
     }
-    // - map common co-ordinates to Manhattan Distance
-    // return lowest distance
-    System.out.println(intersections);
-    List<Integer> integerList = intersections.stream()
-        .map(point -> calculateManhattanDistance(Point.CENTRAL_PORT, point)).sorted().collect(
-            Collectors.toList());
-    System.out.println(integerList);
-    Integer answer = integerList.get(0);
-    System.out.println("answer = " + answer);
-    return answer;
-  }
 
-  public static Point findIntersectionBetweenTwoLines(Point x1, Point y1,
-      Point x2, Point y2) {
-    Point startWireOne = x1;
-    Point endWireOne = y1;
-    Point startWireTwo = x2;
-    Point endWireTwo = y2;
+    private static Map<Point, Integer> recordNumberOfSteps(List<Point> pathTraversedWireOne,
+        List<Point> pathTraversedWireTwo,
+        Set<Point> intersectionOfTwoWires) {
+        // Create Map of intersecting points to number of steps
+        Map<Point, Integer> pointsToNumberOfStepsMap = new HashMap<>();
+        for (Point intersectingPoint : intersectionOfTwoWires) {
+            int numberOfStepsInWireOne = pathTraversedWireOne.indexOf(intersectingPoint) + 1;
+            int numberOfStepsInWireTwo = pathTraversedWireTwo.indexOf(intersectingPoint) + 1;
+            int totalNumberOfStepsTravelled = numberOfStepsInWireOne + numberOfStepsInWireTwo;
+            if (pointsToNumberOfStepsMap.containsKey(intersectingPoint)) {
+                Integer totalNumberOfStepsPreviouslyCalculated = pointsToNumberOfStepsMap.get(intersectingPoint);
+                if (totalNumberOfStepsTravelled < totalNumberOfStepsPreviouslyCalculated) {
+                    pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
+                }
+            } else {
+                pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
+            }
+        }
 
-    int a1 = endWireOne.getY() - startWireOne.getY();
-    int a2 = endWireOne.getX() - startWireOne.getX();
-    int c1 = a1 * startWireOne.getX() + a2 * startWireOne.getY();
-
-    int b1 = endWireTwo.getY() - startWireTwo.getY();
-    int b2 = endWireTwo.getX() - startWireTwo.getX();
-    int c2 = b1 * startWireTwo.getX() + b2 * startWireTwo.getY();
-
-    int delta = a1 * b2 - a2 * b1;
-    if (delta == 0) {
-      // The two lines dont meet
-      return null;
+        return pointsToNumberOfStepsMap;
     }
-    return Point.create((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
-  }
 
-  static GridNavigator traceWirePaths(String[] input) {
-    GridNavigator gridNavigator = new GridNavigator(Point.CENTRAL_PORT);
-    for (String coordinate : input) {
-      String direction = coordinate.substring(0, 1);
-      Integer distance = Integer.valueOf(coordinate.substring(1).stripTrailing());
-      gridNavigator = gridNavigator.move(distance,
-          direction);
+    static GridNavigator traceWirePaths(String[] input) {
+        GridNavigator gridNavigator = new GridNavigator(CENTRAL_PORT);
+        for (String coordinate : input) {
+            String direction = coordinate.substring(0, 1);
+            Integer distance = Integer.valueOf(coordinate.substring(1).stripTrailing());
+            gridNavigator = gridNavigator.move(distance,
+                direction);
+        }
+        return gridNavigator;
     }
-    return gridNavigator;
-  }
 
-  static int calculateManhattanDistance(Point p1, Point p2) {
-    if (!p1.equals(p2)) {
-      return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY());
+    static int calculateManhattanDistance(Point p1, Point p2) {
+        if (!p1.equals(p2)) {
+            return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY());
+        }
+        return 0;
     }
-    return 0;
-  }
 
 }
