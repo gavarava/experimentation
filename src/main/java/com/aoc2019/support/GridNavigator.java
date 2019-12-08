@@ -1,7 +1,9 @@
 package com.aoc2019.support;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 enum Direction {
     U("U"), D("D"), R("R"), L("L");
@@ -19,14 +21,18 @@ enum Direction {
 
 public class GridNavigator {
 
+    private static final int OFFSET_ARRAY_INDEX = 1;
     private Point startingPoint;
     private Point latestPoint;
     private List<Point> pathTraversed;
+    private Map<Point, Integer> pointsToNumberOfStepsMap;
 
     public GridNavigator(Point start) {
         startingPoint = start;
         latestPoint = Point.create(startingPoint.getX(), startingPoint.getY());
         pathTraversed = new ArrayList<>();
+        // resizing overhead
+        pointsToNumberOfStepsMap = new HashMap<>(11000000, 1);
     }
 
     public GridNavigator move(int totalUnitsToMove, String directionAsString) {
@@ -37,6 +43,7 @@ public class GridNavigator {
         GridNavigator latestGridNavigator = this;
         for (int i = 0; i < totalUnitsToMove; i++) {
             latestGridNavigator = move(directionAsString);
+            pointsToNumberOfStepsMap.put(latestPoint, pathTraversed.indexOf(latestPoint) + OFFSET_ARRAY_INDEX);
         }
         return latestGridNavigator;
     }
@@ -88,6 +95,10 @@ public class GridNavigator {
 
     public void setPathTraversed(List<Point> pathTraversed) {
         this.pathTraversed = pathTraversed;
+    }
+
+    public Map<Point, Integer> getPointsToNumberOfStepsMap() {
+        return pointsToNumberOfStepsMap;
     }
 }
 

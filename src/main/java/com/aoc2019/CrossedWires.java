@@ -4,13 +4,9 @@ import static com.aoc2019.support.Point.CENTRAL_PORT;
 
 import com.aoc2019.support.GridNavigator;
 import com.aoc2019.support.Point;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +20,7 @@ public class CrossedWires {
         List<Point> pathTraversedWireOne = gridNavigator.getPathTraversed();
         GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoCoordinates);
         List<Point> pathTraversedWireTwo = gridNavigator2.getPathTraversed();
+
         // - findCommonCo-ordinates
         Set<Point> intersectionOfTwoWires = new HashSet<>();
         for (Point pointOneW1 : pathTraversedWireOne) {
@@ -31,14 +28,6 @@ public class CrossedWires {
                 intersectionOfTwoWires.add(pointOneW1);
             }
         }
-
-        Map<Point, Integer> numberOfStepsMap = recordNumberOfSteps(pathTraversedWireOne, pathTraversedWireTwo,
-            intersectionOfTwoWires);
-        Optional<Entry<Point, Integer>> minValue = numberOfStepsMap.entrySet()
-            .stream().min(Entry.comparingByValue());
-        // Warning:(39, 58) 'Optional.get()' without 'isPresent()' check
-        System.out.println("ANS: Day03 P2 = " + minValue.get().getValue());
-
         int result = 0;
         // return lowest distance
         if (!intersectionOfTwoWires.isEmpty()) {
@@ -48,30 +37,20 @@ public class CrossedWires {
         }
         long endTime = System.currentTimeMillis();
         System.out.println("ANS: Day03 P1 = " + result);
+        int shortestPath = recordNumberOfSteps(gridNavigator, gridNavigator2, intersectionOfTwoWires);
+        System.out.println("ANS: Day03 P2 = " + shortestPath);
         System.out.println("Total time taken = " + (endTime - startTime) / 1000 + " seconds");
         return result;
     }
 
-    private static Map<Point, Integer> recordNumberOfSteps(List<Point> pathTraversedWireOne,
-        List<Point> pathTraversedWireTwo,
+    private static int recordNumberOfSteps(GridNavigator gridNavigatorWireOne,
+        GridNavigator gridNavigatorWireTwo,
         Set<Point> intersectionOfTwoWires) {
-        // Create Map of intersecting points to number of steps
-        Map<Point, Integer> pointsToNumberOfStepsMap = new HashMap<>();
-        for (Point intersectingPoint : intersectionOfTwoWires) {
-            int numberOfStepsInWireOne = pathTraversedWireOne.indexOf(intersectingPoint) + 1;
-            int numberOfStepsInWireTwo = pathTraversedWireTwo.indexOf(intersectingPoint) + 1;
-            int totalNumberOfStepsTravelled = numberOfStepsInWireOne + numberOfStepsInWireTwo;
-            if (pointsToNumberOfStepsMap.containsKey(intersectingPoint)) {
-                Integer totalNumberOfStepsPreviouslyCalculated = pointsToNumberOfStepsMap.get(intersectingPoint);
-                if (totalNumberOfStepsTravelled < totalNumberOfStepsPreviouslyCalculated) {
-                    pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
-                }
-            } else {
-                pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
-            }
-        }
-
-        return pointsToNumberOfStepsMap;
+        Map<Point, Integer> pointsToNumberOfStepsMap1 = gridNavigatorWireOne.getPointsToNumberOfStepsMap();
+        Map<Point, Integer> pointsToNumberOfStepsMap2 = gridNavigatorWireTwo.getPointsToNumberOfStepsMap();
+        return intersectionOfTwoWires.stream()
+            .map(point -> pointsToNumberOfStepsMap1.get(point) + pointsToNumberOfStepsMap2.get(point))
+            .collect(Collectors.toList()).stream().sorted().findFirst().orElse(Integer.MAX_VALUE);
     }
 
     static GridNavigator traceWirePaths(String[] input) {
