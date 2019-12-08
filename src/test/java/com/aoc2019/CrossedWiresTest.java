@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 class CrossedWiresTest {
 
-    @Disabled
     @Test
     void solveCrossedWiresProblem() {
         InputFetcher inputFetcher = new InputFetcher("aoc2019-d3", "\n");

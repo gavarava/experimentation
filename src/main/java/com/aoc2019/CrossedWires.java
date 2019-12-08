@@ -4,9 +4,6 @@ import static com.aoc2019.support.Point.CENTRAL_PORT;
 
 import com.aoc2019.support.GridNavigator;
 import com.aoc2019.support.Point;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,20 +17,13 @@ public class CrossedWires {
         String[] wireTwoCoordinates) {
         long startTime = System.currentTimeMillis();
         // Trace Wire Paths
-        GridNavigator gridNavigator = CrossedWires.traceWirePaths(wireOneCoordinates);
-        List<Point> pathTraversedWireOne = gridNavigator.getPathTraversed();
-        GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoCoordinates);
-        List<Point> pathTraversedWireTwo = gridNavigator2.getPathTraversed();
+        GridNavigator gridNavigator1 = CrossedWires.traceWirePaths(wireOneCoordinates);
+        List<Point> pathTraversedWireOne = gridNavigator1.getPathTraversed();
         // - findCommonCo-ordinates
-        Set<Point> intersectionOfTwoWires = new HashSet<>();
-        for (Point pointOneW1 : pathTraversedWireOne) {
-            if (pathTraversedWireTwo.contains(pointOneW1) && !pointOneW1.equals(CENTRAL_PORT)) {
-                intersectionOfTwoWires.add(pointOneW1);
-            }
-        }
+        GridNavigator gridNavigator2 = CrossedWires.traceWirePaths(wireTwoCoordinates, pathTraversedWireOne);
+        Set<Point> intersectionOfTwoWires = gridNavigator2.getIntersectionsEncountered();
 
-        Map<Point, Integer> numberOfStepsMap = recordNumberOfSteps(pathTraversedWireOne, pathTraversedWireTwo,
-            intersectionOfTwoWires);
+        Map<Point, Integer> numberOfStepsMap = gridNavigator2.getPointsToNumberOfStepsMap();
         Optional<Entry<Point, Integer>> minValue = numberOfStepsMap.entrySet()
             .stream().min(Entry.comparingByValue());
         // Warning:(39, 58) 'Optional.get()' without 'isPresent()' check
@@ -52,33 +42,20 @@ public class CrossedWires {
         return result;
     }
 
-    private static Map<Point, Integer> recordNumberOfSteps(List<Point> pathTraversedWireOne,
-        List<Point> pathTraversedWireTwo,
-        Set<Point> intersectionOfTwoWires) {
-        // Create Map of intersecting points to number of steps
-        Map<Point, Integer> pointsToNumberOfStepsMap = new HashMap<>();
-        for (Point intersectingPoint : intersectionOfTwoWires) {
-            int numberOfStepsInWireOne = pathTraversedWireOne.indexOf(intersectingPoint) + 1;
-            int numberOfStepsInWireTwo = pathTraversedWireTwo.indexOf(intersectingPoint) + 1;
-            int totalNumberOfStepsTravelled = numberOfStepsInWireOne + numberOfStepsInWireTwo;
-            if (pointsToNumberOfStepsMap.containsKey(intersectingPoint)) {
-                Integer totalNumberOfStepsPreviouslyCalculated = pointsToNumberOfStepsMap.get(intersectingPoint);
-                if (totalNumberOfStepsTravelled < totalNumberOfStepsPreviouslyCalculated) {
-                    pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
-                }
-            } else {
-                pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
-            }
-        }
-
-        return pointsToNumberOfStepsMap;
-    }
-
     static GridNavigator traceWirePaths(String[] input) {
         GridNavigator gridNavigator = new GridNavigator(CENTRAL_PORT);
+        return tracePaths(input, gridNavigator);
+    }
+
+    static GridNavigator traceWirePaths(String[] input, List<Point> earlierPathTraversed) {
+        GridNavigator gridNavigator = new GridNavigator(CENTRAL_PORT, earlierPathTraversed);
+        return tracePaths(input, gridNavigator);
+    }
+
+    private static GridNavigator tracePaths(String[] input, GridNavigator gridNavigator) {
         for (String coordinate : input) {
             String direction = coordinate.substring(0, 1);
-            Integer distance = Integer.valueOf(coordinate.substring(1).stripTrailing());
+            int distance = Integer.parseInt(coordinate.substring(1).stripTrailing());
             gridNavigator = gridNavigator.move(distance,
                 direction);
         }

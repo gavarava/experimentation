@@ -31,8 +31,17 @@ public class GridNavigator {
         startingPoint = start;
         latestPoint = Point.create(startingPoint.getX(), startingPoint.getY());
         pathTraversed = new ArrayList<>();
-        // resizing overhead
-        pointsToNumberOfStepsMap = new HashMap<>(11000000, 1);
+        intersectionsEncountered = new HashSet<>();
+    }
+
+    public GridNavigator(Point start, List<Point> earlierPathTraversed) {
+        startingPoint = start;
+        latestPoint = Point.create(startingPoint.getX(), startingPoint.getY());
+        pathTraversed = new ArrayList<>();
+
+        this.earlierPathTraversed = earlierPathTraversed;
+        intersectionsEncountered = new HashSet<>();
+        pointsToNumberOfStepsMap = new HashMap<>(earlierPathTraversed.size());
     }
 
     public GridNavigator move(int totalUnitsToMove, String directionAsString) {
@@ -70,23 +79,32 @@ public class GridNavigator {
                 pathTraversed.add(latestPoint);
                 break;
         }
+        recordIntersectionPoints();
         return this;
     }
 
-    public Point getStartingPoint() {
-        return startingPoint;
+    private void recordIntersectionPoints() {
+        if (earlierPathTraversed != null && earlierPathTraversed.contains(latestPoint)) {
+            intersectionsEncountered.add(latestPoint);
+            collectShortPathInformation(pathTraversed.size(), latestPoint);
+        }
     }
 
-    public void setStartingPoint(Point startingPoint) {
-        this.startingPoint = startingPoint;
+    private void collectShortPathInformation(int numberOfStepsInWireTwo, Point intersectingPoint) {
+        int numberOfStepsInWireOne = earlierPathTraversed.indexOf(intersectingPoint) + 1;
+        int totalNumberOfStepsTravelled = numberOfStepsInWireOne + numberOfStepsInWireTwo;
+        if (pointsToNumberOfStepsMap.containsKey(intersectingPoint)) {
+            Integer totalNumberOfStepsPreviouslyCalculated = pointsToNumberOfStepsMap.get(intersectingPoint);
+            if (totalNumberOfStepsTravelled < totalNumberOfStepsPreviouslyCalculated) {
+                pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
+            }
+        } else {
+            pointsToNumberOfStepsMap.put(intersectingPoint, totalNumberOfStepsTravelled);
+        }
     }
 
     public Point getLatestPoint() {
         return latestPoint;
-    }
-
-    public void setLatestPoint(Point latestPoint) {
-        this.latestPoint = latestPoint;
     }
 
     public List<Point> getPathTraversed() {
@@ -95,6 +113,10 @@ public class GridNavigator {
 
     public void setPathTraversed(List<Point> pathTraversed) {
         this.pathTraversed = pathTraversed;
+    }
+
+    public Map<Point, Integer> getPointsToNumberOfStepsMap() {
+        return pointsToNumberOfStepsMap;
     }
 
     public Map<Point, Integer> getPointsToNumberOfStepsMap() {
