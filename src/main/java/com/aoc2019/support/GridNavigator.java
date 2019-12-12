@@ -2,8 +2,10 @@ package com.aoc2019.support;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 enum Direction {
     U("U"), D("D"), R("R"), L("L");
@@ -21,10 +23,11 @@ enum Direction {
 
 public class GridNavigator {
 
-    private static final int OFFSET_ARRAY_INDEX = 1;
     private Point startingPoint;
     private Point latestPoint;
     private List<Point> pathTraversed;
+    private List<Point> earlierPathTraversed;
+    private Set<Point> intersectionsEncountered;
     private Map<Point, Integer> pointsToNumberOfStepsMap;
 
     public GridNavigator(Point start) {
@@ -52,7 +55,6 @@ public class GridNavigator {
         GridNavigator latestGridNavigator = this;
         for (int i = 0; i < totalUnitsToMove; i++) {
             latestGridNavigator = move(directionAsString);
-            pointsToNumberOfStepsMap.put(latestPoint, pathTraversed.indexOf(latestPoint) + OFFSET_ARRAY_INDEX);
         }
         return latestGridNavigator;
     }
@@ -111,12 +113,8 @@ public class GridNavigator {
         return pathTraversed;
     }
 
-    public void setPathTraversed(List<Point> pathTraversed) {
-        this.pathTraversed = pathTraversed;
-    }
-
-    public Map<Point, Integer> getPointsToNumberOfStepsMap() {
-        return pointsToNumberOfStepsMap;
+    public Set<Point> getIntersectionsEncountered() {
+        return intersectionsEncountered;
     }
 
     public Map<Point, Integer> getPointsToNumberOfStepsMap() {

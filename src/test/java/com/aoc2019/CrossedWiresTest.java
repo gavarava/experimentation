@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 class CrossedWiresTest {
 
     @Test
+    @Disabled
     void solveCrossedWiresProblem() {
         InputFetcher inputFetcher = new InputFetcher("aoc2019-d3", "\n");
         String[] inputDataAsArrayOfStrings = inputFetcher.getInputDataAsArrayOfStrings();
