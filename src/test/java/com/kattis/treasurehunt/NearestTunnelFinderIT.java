@@ -5,12 +5,13 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 public class NearestTunnelFinderIT {
 
-    private static final String FILE_PATH = "/home/gaurav/development/learning/myprojects/adventofcode-2018/src/main/resources/";
+    private static final String FILE_PATH = "/home/gaurav/development/learning/myprojects/experimentation/src/main/resources/";
     private NearestTunnelFinder nearestTunnelFinder;
 
     @Test
@@ -20,7 +21,7 @@ public class NearestTunnelFinderIT {
             .initializeFromFile(FILE_PATH + "treasurehunt/treasurehunt_when_many_interconnected_caves_II");
 
         NearestTunnelFinder nearestTunnelFinder = treasureDiveSolver.getNearestTunnelFinder();
-        HashMap<String, ArrayList<Tunnel>> caveToLeadingTunnelsMap = nearestTunnelFinder.setupCaveToLeadingTunnelsMap();
+        Map<String, ArrayList<Tunnel>> caveToLeadingTunnelsMap = nearestTunnelFinder.setupCaveToLeadingTunnelsMap();
 
         System.out.println(caveToLeadingTunnelsMap);
         System.out.println(nearestTunnelFinder.getShortestUnvisitedTunnelFromStartingPoint());
@@ -35,7 +36,7 @@ public class NearestTunnelFinderIT {
 
         NearestTunnelFinder nearestTunnelFinder = treasureDiveSolver.getNearestTunnelFinder();
 
-        ArrayList<Tunnel> tunnels = nearestTunnelFinder.getTunnels();
+        List<Tunnel> tunnels = nearestTunnelFinder.getTunnels();
         System.out.println(tunnels.get(0));
         System.out.println(nearestTunnelFinder.getClosestUnvisitedDestination(tunnels.get(0)));
     }
@@ -49,7 +50,7 @@ public class NearestTunnelFinderIT {
 
         NearestTunnelFinder nearestTunnelFinder = treasureDiveSolver.getNearestTunnelFinder();
 
-        ArrayList<Tunnel> tunnels = nearestTunnelFinder.getTunnels();
+        List<Tunnel> tunnels = nearestTunnelFinder.getTunnels();
         System.out.println("ALL POSSIBLE TUNNELS ---> \n");
         tunnels.forEach(tunnel -> System.out.println(tunnel));
         System.out.println();
@@ -66,7 +67,8 @@ public class NearestTunnelFinderIT {
         System.out.println("tunnelToBeExcluded --> " + tunnelToBeExcluded);
         Tunnel shortestTunnelFromStartingPointWithExclusion = nearestTunnelFinder
             .getShortestTunnelFromStartingPointWithExclusion(tunnelToBeExcluded);
-        System.out.println("shortestTunnelFromStartingPointWithExclusion --> " + shortestTunnelFromStartingPointWithExclusion);
+        System.out.println(
+            "shortestTunnelFromStartingPointWithExclusion --> " + shortestTunnelFromStartingPointWithExclusion);
 
         assertThat(shortestTunnelFromStartingPointWithExclusion, is(tunnels.get(1)));
     }
@@ -79,7 +81,7 @@ public class NearestTunnelFinderIT {
                 FILE_PATH + "treasurehunt/treasurehunt_when_many_interconnected_caves_II");
 
         NearestTunnelFinder nearestTunnelFinder = treasureDiveSolver.getNearestTunnelFinder();
-        HashMap<String, ArrayList<Tunnel>> stringArrayListHashMap = nearestTunnelFinder.setupCaveToLeadingTunnelsMap();
+        Map<String, ArrayList<Tunnel>> stringArrayListHashMap = nearestTunnelFinder.setupCaveToLeadingTunnelsMap();
 
         System.out.println(stringArrayListHashMap);
     }

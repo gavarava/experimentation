@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class TreasureDiveSolver {
@@ -47,7 +48,7 @@ public class TreasureDiveSolver {
             maximumIdolsFinder[testCases] = new MaximumIdolsFinder(numberOfIdols);
 
             String idolsToCaveMapping = sc.nextLine();
-            HashMap<String, Integer> caveToIdolCountMap = setupCaveToIdolCountMapFromInput(idolsToCaveMapping);
+            Map<String, Integer> caveToIdolCountMap = setupCaveToIdolCountMapFromInput(idolsToCaveMapping);
             maximumIdolsFinder[testCases].setCaveToIdolCountMap(caveToIdolCountMap);
             nearestTunnelFinder[testCases] = new NearestTunnelFinder(tunnelsList, caveToIdolCountMap,
                 numberOfCaves);
@@ -74,7 +75,7 @@ public class TreasureDiveSolver {
         return tunnelArray;
     }
 
-    public HashMap<String, Integer> setupCaveToIdolCountMapFromInput(String idolsToCaveMapping) {
+    public Map<String, Integer> setupCaveToIdolCountMapFromInput(String idolsToCaveMapping) {
         String[] idolToCaveMappingArray = idolsToCaveMapping.split(WHITESPACE);
         HashMap<String, Integer> caveToIdolCountMap = new HashMap<>();
         for (int i = 0; i < idolToCaveMappingArray.length; i++) {

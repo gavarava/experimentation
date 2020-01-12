@@ -10,7 +10,7 @@ class MaximumIdolsFinderIT {
 
     private static final String WHITESPACE = "\\s";
 
-    private static final String FILE_PATH = "/home/gaurav/development/learning/myprojects/adventofcode-2018/src/main/resources/";
+    private static final String FILE_PATH = "/home/gaurav/development/learning/myprojects/experimentation/src/main/resources/";
 
     private MaximumIdolsFinder maximumIdolsFinder;
 

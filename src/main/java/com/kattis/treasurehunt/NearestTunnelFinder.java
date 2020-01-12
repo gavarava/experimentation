@@ -5,17 +5,19 @@ import static java.lang.String.valueOf;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class NearestTunnelFinder {
 
     private static final String STARTING_POINT_CAVE = "0";
-    private HashMap<String, ArrayList<Tunnel>> caveToLeadingTunnelsMap;
-    private HashMap<String, Integer> caveToIdolCountMap;
-    private ArrayList<Tunnel> tunnels;
+    private Map<String, ArrayList<Tunnel>> caveToLeadingTunnelsMap;
+    private Map<String, Integer> caveToIdolCountMap;
+    private List<Tunnel> tunnels;
     private int numberOfCaves;
 
-    public NearestTunnelFinder(ArrayList<Tunnel> tunnels, HashMap<String, Integer> caveToIdolCountMap,
+    public NearestTunnelFinder(List<Tunnel> tunnels, Map<String, Integer> caveToIdolCountMap,
         int numberOfCaves) {
         this.tunnels = tunnels;
         this.numberOfCaves = numberOfCaves;
@@ -124,7 +126,7 @@ public class NearestTunnelFinder {
      * This will help us find very quickly which tunnels connect to the current tunnel and lead us to the next closest
      * cave Later we can select the next closet with idols first if possible
      */
-    HashMap<String, ArrayList<Tunnel>> setupCaveToLeadingTunnelsMap() {
+    Map<String, ArrayList<Tunnel>> setupCaveToLeadingTunnelsMap() {
         caveToLeadingTunnelsMap = new HashMap<>(numberOfCaves);
         // TODO Collections.sort(tunnels, new TunnelStartingPointComparator());
         for (Tunnel tunnel : tunnels) {
@@ -143,7 +145,7 @@ public class NearestTunnelFinder {
         return caveToLeadingTunnelsMap;
     }
 
-    public ArrayList<Tunnel> getTunnels() {
+    public List<Tunnel> getTunnels() {
         return tunnels;
     }
 }

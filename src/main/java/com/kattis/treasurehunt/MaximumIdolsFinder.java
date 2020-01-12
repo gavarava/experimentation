@@ -2,7 +2,7 @@ package com.kattis.treasurehunt;
 
 import static java.lang.String.valueOf;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class MaximumIdolsFinder {
 
@@ -10,7 +10,7 @@ public class MaximumIdolsFinder {
     // i = 6 mellan 0 och 8
     private int totalAvailableIdols;
     // 1=1, 2=4, 3=1
-    private HashMap<String, Integer> caveToIdolCountMap;
+    private Map<String, Integer> caveToIdolCountMap;
     private NearestTunnelFinder nearestTunnelFinder;
 
     public MaximumIdolsFinder(int totalAvailableIdols) {
@@ -97,7 +97,7 @@ public class MaximumIdolsFinder {
         return caveToIdolCountMap.containsKey(caveNumber) ? caveToIdolCountMap.get(caveNumber) : 0;
     }
 
-    public void setCaveToIdolCountMap(HashMap<String, Integer> caveToIdolCountMap) {
+    public void setCaveToIdolCountMap(Map<String, Integer> caveToIdolCountMap) {
         this.caveToIdolCountMap = caveToIdolCountMap;
     }
 
