@@ -1,9 +1,9 @@
 package com.aoc2019;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.InputFetcher;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,8 +29,8 @@ class IntCodeComputerTest {
     void restoreComputer() {
         InputFetcher inputFetcher = new InputFetcher("aoc2019-d2", ",");
         int[] input = inputFetcher.getInputDataAsArrayOfIntegers();
-/*        Arrays.stream(resetGravityAssistComputer(input, 12, 2))
-            .forEach(value -> System.out.print(value + " "));*/
+        Arrays.stream(intCodeComputer.runIntCodeProgram(input, 12, 2))
+            .forEach(value -> System.out.print(value + " "));
         System.out.println();
         // 3058646 is the answer
         System.out.println("Ans D02 Ch01 = " + input[0]);

@@ -4,6 +4,8 @@ import com.InputFetcher;
 
 public class AdvancedIntCodeComputer extends IntCodeComputer {
 
+    private static final int INPUT_VALUE_FROM_SYSTEM = 1;
+
     public static void main(String[] args) {
         InputFetcher inputFetcher = new InputFetcher("aoc2019-d5", ",");
         int[] input = inputFetcher.getInputDataAsArrayOfIntegers();
@@ -12,12 +14,22 @@ public class AdvancedIntCodeComputer extends IntCodeComputer {
         System.out.println("ANS Day-04 Part-01: " + answer);
     }
 
+    static void executeInstruction_4(int[] intCodeProgram, int instructionPointer) {
+        System.out.println(intCodeProgram[instructionPointer]);
+    }
+
+    static void executeInstruction_3(int[] intCodeProgram, int instructionPointer) {
+        intCodeProgram[instructionPointer] = INPUT_VALUE_FROM_SYSTEM;
+    }
+
     @Override
     protected int[] runIntCodeProgram(int[] intCodeProgram, int noun, int verb) {
         int instructionPointer = 0;
 
-        intCodeProgram[instructionPointer + 1] = noun;
-        intCodeProgram[instructionPointer + 2] = verb;
+        if (intCodeProgram.length > 2) {
+            intCodeProgram[instructionPointer + 1] = noun;
+            intCodeProgram[instructionPointer + 2] = verb;
+        }
 
         while (instructionPointer < intCodeProgram.length) {
             switch (intCodeProgram[instructionPointer]) {
@@ -40,14 +52,6 @@ public class AdvancedIntCodeComputer extends IntCodeComputer {
             instructionPointer += 4;
         }
         return intCodeProgram;
-    }
-
-    static void executeInstruction_4(int[] intCodeProgram, int instructionPointer) {
-
-    }
-
-    static void executeInstruction_3(int[] intCodeProgram, int instructionPointer) {
-
     }
 
 }

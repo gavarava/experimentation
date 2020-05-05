@@ -1,10 +1,52 @@
 package com.aoc2019;
 
 import com.InputFetcher;
+import com.aoc2019.intcode.support.InstructionValidator;
 
 public class IntCodeComputer {
 
     private static final int EXPECTED_OUTPUT = 19690720;
+
+    private static int[] resetInputByFetchingAgain() {
+        InputFetcher inputFetcher = new InputFetcher("aoc2019-d2", ",");
+        return inputFetcher.getInputDataAsArrayOfIntegers();
+    }
+
+    static void executeInstruction_1(int[] intCodeProgram, int instructionPointer) {
+        InstructionValidator instructionValidator = new InstructionValidator(intCodeProgram,
+            instructionPointer);
+        if (!instructionValidator.isInvalidInstruction()) {
+            try {
+                intCodeProgram[intCodeProgram[(instructionPointer + 3)]] =
+                    intCodeProgram[intCodeProgram[(instructionPointer + 1)]] + intCodeProgram[intCodeProgram[
+                        (instructionPointer + 2)]];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println("ArrayIndexOutOfBoundsException --> " + e.getMessage());
+                System.err.println("instructionPointer = " + instructionPointer);
+                System.err.println("instructionPointer + 3 = " + (instructionPointer + 3));
+                System.err.println("instructionPointer + 2 = " + (instructionPointer + 2));
+                System.err.println("instructionPointer + 1 = " + (instructionPointer + 1));
+            }
+        }
+    }
+
+    static void executeInstruction_2(int[] intCodeProgram, int instructionPointer) {
+        InstructionValidator instructionValidator = new InstructionValidator(intCodeProgram,
+            instructionPointer);
+        if (!instructionValidator.isInvalidInstruction()) {
+            try {
+                intCodeProgram[intCodeProgram[instructionPointer + 3]] =
+                    intCodeProgram[intCodeProgram[instructionPointer + 1]] * intCodeProgram[intCodeProgram[
+                        instructionPointer + 2]];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println("ArrayIndexOutOfBoundsException --> " + e.getMessage());
+                System.err.println("instructionPointer = " + instructionPointer);
+                System.err.println("instructionPointer + 3 = " + (instructionPointer + 3));
+                System.err.println("instructionPointer + 2 = " + (instructionPointer + 2));
+                System.err.println("instructionPointer + 1 = " + (instructionPointer + 1));
+            }
+        }
+    }
 
     public int completeGravityAssist(int[] intCodeProgram) {
         int result = 0;
@@ -23,11 +65,6 @@ public class IntCodeComputer {
             }
         }
         return result;
-    }
-
-    private static int[] resetInputByFetchingAgain() {
-        InputFetcher inputFetcher = new InputFetcher("aoc2019-d2", ",");
-        return inputFetcher.getInputDataAsArrayOfIntegers();
     }
 
     protected int[] runIntCodeProgram(int[] intCodeProgram, int noun, int verb) {
@@ -51,33 +88,5 @@ public class IntCodeComputer {
             instructionPointer += 4;
         }
         return intCodeProgram;
-    }
-
-    static void executeInstruction_2(int[] intCodeProgram, int instructionPointer) {
-        if (instructionPointer + 3 > intCodeProgram.length) {
-             System.err.println("BAD STATE 2A");
-        } else if (intCodeProgram[instructionPointer + 3] > intCodeProgram.length) {
-             System.err.println("BAD STATE 2B");
-        } else if (intCodeProgram[intCodeProgram[instructionPointer + 3]] > intCodeProgram.length) {
-              System.err.println("BAD STATE 2C");
-        } else {
-            intCodeProgram[intCodeProgram[instructionPointer + 3]] =
-                intCodeProgram[intCodeProgram[instructionPointer + 1]] * intCodeProgram[intCodeProgram[
-                    instructionPointer + 2]];
-        }
-    }
-
-    static void executeInstruction_1(int[] intCodeProgram, int instructionPointer) {
-        if (instructionPointer + 3 > intCodeProgram.length) {
-                 System.err.println("BAD STATE 1A");
-        } else if (intCodeProgram[instructionPointer + 3] > intCodeProgram.length) {
-                 System.err.println("BAD STATE 1B");
-        } else if (intCodeProgram[intCodeProgram[instructionPointer + 3]] > intCodeProgram.length) {
-                 System.err.println("BAD STATE 1C");
-        } else {
-            intCodeProgram[intCodeProgram[instructionPointer + 3]] =
-                intCodeProgram[intCodeProgram[instructionPointer + 1]] + intCodeProgram[intCodeProgram[
-                    instructionPointer + 2]];
-        }
     }
 }

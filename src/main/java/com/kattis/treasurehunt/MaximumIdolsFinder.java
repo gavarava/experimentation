@@ -28,7 +28,8 @@ public class MaximumIdolsFinder {
         Tunnel previousTunnel = null;
         while (totalAvailableIdols != 0 || idolsCount != 8) {
             currentTunnel.setVisited(true);
-            if (currentTunnel.getStartingPointCave() == startingPoint) {
+            int caveAtStartOfCurrentTunnel = currentTunnel.getStartingPointCave();
+            if (isDiverAt(startingPoint, caveAtStartOfCurrentTunnel)) {
                 if (reserveUnitsOfAir <= 0) {
                     break;
                 }
@@ -42,7 +43,7 @@ public class MaximumIdolsFinder {
                 }
             } else {
                 if (currentTunnel != null) {
-                    if (previousTunnel.getDestination() == currentTunnel.getStartingPointCave()) {
+                    if (isDiverAt(caveAtStartOfCurrentTunnel, previousTunnel.getDestination())) {
                         if (reserveUnitsOfAir <= 0) {
                             break;
                         }
@@ -66,6 +67,10 @@ public class MaximumIdolsFinder {
             }
         }
         return idolsCount;
+    }
+
+    private boolean isDiverAt(int startingPoint, int startingPointCave) {
+        return startingPointCave == startingPoint;
     }
 
     private boolean isAffordable(int reserveUnitsOfAir, int distanceInConsumedAirUnits) {
